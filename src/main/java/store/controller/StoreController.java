@@ -17,9 +17,11 @@ public class StoreController {
 
     public void run() {
         Store store = new Store();
+        BuyController buyController = new BuyController();
         promotionListUp(store);
         productListUp(store);
         OutputView.printInventoryInformation(store);
+        buyController.buyProduct(store);
     }
 
     private void promotionListUp(Store store) {
