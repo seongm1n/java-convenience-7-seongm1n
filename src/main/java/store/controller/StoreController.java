@@ -1,6 +1,7 @@
 package store.controller;
 
 import store.model.Product;
+import store.model.Promotion;
 import store.model.Store;
 import store.view.OutputView;
 
@@ -9,14 +10,36 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class StoreController {
 
     public void run() {
         Store store = new Store();
+        promotionListUp(store);
         productListUp(store);
         OutputView.printInventoryInformation(store);
+    }
+
+    private void promotionListUp(Store store) {
+        String productsContent = readMarkdownFile("promotions.md");
+        String[] lines = productsContent.split("\n");
+        Arrays.stream(lines)
+                .map(this::parsePromotion)
+                .filter(Objects::nonNull)
+                .forEach(store::addPromotion);
+    }
+
+    private Promotion parsePromotion(String line) {
+        String[] parts = line.split(",");
+        String name = parts[0];
+        if (name.equals("name")) return null;
+        int buy = Integer.parseInt(parts[1]);
+        int get = Integer.parseInt(parts[2]);
+        String startDate = parts[3];
+        String endDate = parts[4];
+        return new Promotion(name, buy, get, startDate, endDate);
     }
 
     private void productListUp(Store store) {
@@ -24,7 +47,7 @@ public class StoreController {
         String[] lines = productsContent.split("\n");
         Arrays.stream(lines)
                 .map(this::parseProduct)
-                .filter(product -> product != null)
+                .filter(Objects::nonNull)
                 .forEach(store::addProduct);
     }
 
