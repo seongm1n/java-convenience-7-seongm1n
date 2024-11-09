@@ -20,7 +20,6 @@ public class StoreController {
         BuyController buyController = new BuyController();
         promotionListUp(store);
         productListUp(store);
-        OutputView.printInventoryInformation(store);
         buyController.buyProduct(store);
     }
 

@@ -10,14 +10,17 @@ import java.util.Map;
 
 public class BuyController {
     public void buyProduct(Store store) {
-        Receipt receipt = new Receipt();
-        while (true) {
+        boolean continueShopping = true;
+        while (continueShopping) {
+            Receipt receipt = new Receipt();
+            OutputView.printInventoryInformation(store);
             try {
                 Map<String, Integer> purchasedItems = InputView.purchasedItems();
                 processPurchasedItems(store, receipt, purchasedItems);
                 applyMembershipDiscount(receipt);
                 receipt.print();
-                break;
+                OutputView.askForAdditionalPurchase();
+                continueShopping = InputView.yOrN();
             } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());
             }

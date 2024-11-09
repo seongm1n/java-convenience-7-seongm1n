@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Store {
-    private List<Product> productList = new ArrayList<>();
-    private List<Promotion> promotionList = new ArrayList<>();
+    private final List<Product> productList = new ArrayList<>();
+    private final List<Promotion> promotionList = new ArrayList<>();
 
     public void addProduct(Product product) {
         productList.add(product);
@@ -31,10 +31,9 @@ public class Store {
     }
 
     public void deductInventory(String productName, int quantity) {
-        for (Product product : productList) {
-            if (product.getName().equals(productName)) {
-                product.setQuantity(product.getQuantity() - quantity);
-            }
-        }
+        productList.stream()
+                .filter(product -> product.getName().equals(productName))
+                .findFirst()
+                .ifPresent(product -> product.setQuantity(product.getQuantity() - quantity));
     }
 }
