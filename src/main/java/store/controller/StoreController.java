@@ -66,7 +66,7 @@ public class StoreController {
     private String readMarkdownFile(String fileName) {
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream(fileName);
         if (inputStream == null) {
-            throw new IllegalArgumentException(fileName + " 파일을 찾을 수 없습니다.");
+            throw new IllegalArgumentException("[ERROR] 재고 파일을 찾을 수 없습니다.");
         }
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
             return reader.lines().collect(Collectors.joining("\n"));

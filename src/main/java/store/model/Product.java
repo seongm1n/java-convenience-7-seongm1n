@@ -42,6 +42,10 @@ public class Product {
         return (number / (get + buy)) * get;
     }
 
+    public boolean isPromotion() {
+        return promotion != null;
+    }
+
     @Override
     public String toString() {
         NumberFormat formatter = NumberFormat.getInstance();

@@ -10,28 +10,37 @@ import java.util.List;
 import java.util.Map;
 
 public class BuyController {
-
     public void buyProduct(Store store) {
         Receipt receipt = new Receipt();
-        Map<String, Integer> purchasedItems = InputView.purchasedItems();
-        for (String key : purchasedItems.keySet()) {
-            int number = purchasedItems.get(key);
+        while (true) {
             try {
-                Product product = checkInventory(store, key, number);
-                int eventProduct = product.addPromotions(number);
-                if (eventProduct != 0) {
-                    OutputView.printAddEventProduct(eventProduct, product.getName());
-                    if (InputView.purchasedEventItems()) {
-                        number += eventProduct;
-                        purchasedItems.put(key, number);
+                Map<String, Integer> purchasedItems = InputView.purchasedItems();
+                for (String key : purchasedItems.keySet()) {
+                    int number = purchasedItems.get(key);
+                    Product product = checkInventory(store, key, number);
+                    if (product.isPromotion()) {
+                        int eventProduct = product.addPromotions(number);
+                        if (eventProduct != 0) {
+                            OutputView.printAddEventProduct(eventProduct, product.getName());
+                            if (InputView.yOrN()) {
+                                number += eventProduct;
+                                purchasedItems.put(key, number);
+                            }
+                        }
+                        receipt.addItem(product, number, product.applyPromotions(number));
+                    }
+                    if (!product.isPromotion()) {
+                        receipt.addItem(product, number, 0);
                     }
                 }
-                receipt.addItem(product, number, product.applyPromotions(number));
+                OutputView.printMemberShipDiscount();
+                if (InputView.yOrN()) receipt.applyMembershipDiscount();
+                receipt.print();
+                break;
             } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());
             }
         }
-        receipt.print();
     }
 
     private Product checkInventory(Store store, String product, int number) {

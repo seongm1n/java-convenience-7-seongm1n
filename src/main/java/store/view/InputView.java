@@ -19,11 +19,11 @@ public class InputView {
         return itemsMap;
     }
 
-    public static boolean purchasedEventItems() {
+    public static boolean yOrN() {
         String input = Console.readLine();
         if (input.equals("Y")) return true;
         if (input.equals("N")) return false;
         System.out.println("[ERROR] 잘못된 입력입니다. 다시 입력해 주세요.");
-        return purchasedEventItems();
+        return yOrN();
     }
 }

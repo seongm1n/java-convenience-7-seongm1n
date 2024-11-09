@@ -18,8 +18,9 @@ public class Receipt {
         }
     }
 
-    public void setMembershipDiscount(int discount) {
-        this.membershipDiscount = discount;
+    public void applyMembershipDiscount() {
+        int discountedTotal = totalAmount - eventDiscount;
+        membershipDiscount = (int) (discountedTotal * 0.3);
     }
 
     public void print() {
