@@ -29,4 +29,12 @@ public class Store {
                 .findFirst()
                 .orElse(null);
     }
+
+    public void deductInventory(String productName, int quantity) {
+        for (Product product : productList) {
+            if (product.getName().equals(productName)) {
+                product.setQuantity(product.getQuantity() - quantity);
+            }
+        }
+    }
 }

@@ -46,6 +46,10 @@ public class Product {
         return promotion != null;
     }
 
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
     @Override
     public String toString() {
         NumberFormat formatter = NumberFormat.getInstance();
