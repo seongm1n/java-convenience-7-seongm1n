@@ -22,4 +22,11 @@ public class Store {
     public List<Promotion> getPromotionList() {
         return promotionList;
     }
+
+    public Promotion findPromotionByName(String name) {
+        return promotionList.stream()
+                .filter(promo -> promo.getName().equals(name))
+                .findFirst()
+                .orElse(null);
+    }
 }

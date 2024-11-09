@@ -48,18 +48,18 @@ public class StoreController {
         String productsContent = readMarkdownFile("products.md");
         String[] lines = productsContent.split("\n");
         Arrays.stream(lines)
-                .map(this::parseProduct)
+                .map(line -> parseProduct(line, store))
                 .filter(Objects::nonNull)
                 .forEach(store::addProduct);
     }
 
-    private Product parseProduct(String line) {
+    private Product parseProduct(String line, Store store) {
         String[] parts = line.split(",");
         String name = parts[0];
         if (name.equals("name")) return null;
         int price = Integer.parseInt(parts[1]);
         int quantity = Integer.parseInt(parts[2]);
-        String promotion = parts[3];
+        Promotion promotion = store.findPromotionByName(parts[3]);
         return new Product(name, price, quantity, promotion);
     }
 
