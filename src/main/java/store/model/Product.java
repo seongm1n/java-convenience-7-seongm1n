@@ -1,6 +1,9 @@
 package store.model;
 
+import camp.nextstep.edu.missionutils.DateTimes;
+
 import java.text.NumberFormat;
+import java.time.LocalDateTime;
 
 public class Product {
     private final String name;
@@ -43,7 +46,14 @@ public class Product {
     }
 
     public boolean isPromotion() {
-        return promotion != null;
+        if (promotion == null) {
+            return false;
+        }
+        LocalDateTime time = DateTimes.now();
+        if (time.isBefore(promotion.getStartDate()) || time.isAfter(promotion.getEndDate())) {
+            return false;
+        }
+        return true;
     }
 
     public void setQuantity(int quantity) {
