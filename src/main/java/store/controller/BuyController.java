@@ -13,7 +13,6 @@ public class BuyController {
         boolean continueShopping = true;
         while (continueShopping) {
             Receipt receipt = new Receipt();
-            OutputView.printInventoryInformation(store);
             try {
                 Map<String, Integer> purchasedItems = InputView.purchasedItems();
                 processPurchasedItems(store, receipt, purchasedItems);
@@ -21,6 +20,7 @@ public class BuyController {
                 receipt.print();
                 OutputView.askForAdditionalPurchase();
                 continueShopping = InputView.yOrN();
+                if (continueShopping) OutputView.printInventoryInformation(store);
             } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());
             }

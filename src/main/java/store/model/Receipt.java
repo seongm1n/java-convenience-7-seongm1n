@@ -28,14 +28,14 @@ public class Receipt {
         System.out.printf("%-12s %-8s %-10s\n", "상품명", "수량", "금액");
         System.out.println("====================================");
         for (ReceiptItem item : items) {
-            System.out.printf("%-12s %-8d %-10d\n", item.getName(), item.getQuantity(), item.getItemTotal());
+            System.out.printf("%-12s %-8d %-10s\n", item.getName(), item.getQuantity(), String.format("%,d", item.getItemTotal()));
         }
         System.out.println("====================================");
-        System.out.printf("%-12s %-8s %-10s\n", "총구매액", "", totalAmount);
-        System.out.printf("%-12s %-8s %-10s\n", "행사할인", "", "-" + eventDiscount);
-        System.out.printf("%-12s %-8s %-10s\n", "멤버십할인", "", "-" + membershipDiscount);
+        System.out.printf("%-12s %-8s %-10s\n", "총구매액", "", String.format("%,d", totalAmount));
+        System.out.printf("%-12s %-8s %-10s\n", "행사할인", "", "-" + String.format("%,d", eventDiscount));
+        System.out.printf("%-12s %-8s %-10s\n", "멤버십할인", "", "-" + String.format("%,d", membershipDiscount));
         int finalAmount = totalAmount - eventDiscount - membershipDiscount;
-        System.out.printf("%-12s %-8s %-10s\n", "내실돈", "", finalAmount);
+        System.out.printf("%-12s %-8s %-10s\n", "내실돈", "", String.format("%,d", finalAmount));
         System.out.println("====================================");
     }
 
@@ -64,10 +64,6 @@ public class Receipt {
 
         public int getQuantity() {
             return quantity;
-        }
-
-        public int getPromotionAppliedQuantity() {
-            return promotionAppliedQuantity;
         }
 
         public int getItemTotal() {
