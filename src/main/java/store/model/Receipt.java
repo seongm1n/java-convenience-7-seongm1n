@@ -26,9 +26,17 @@ public class Receipt {
     public void print() {
         System.out.println("============= W 편의점 ==============");
         System.out.printf("%-12s %-8s %-10s\n", "상품명", "수량", "금액");
-        System.out.println("====================================");
         for (ReceiptItem item : items) {
-            System.out.printf("%-12s %-8d %-10s\n", item.getName(), item.getQuantity(), String.format("%,d", item.getItemTotal()));
+            System.out.printf("%-12s %-8d %-10s\n",
+                    item.getName(),
+                    item.getQuantity(),
+                    String.format("%,d", item.getItemTotal()));
+        }
+        for (ReceiptItem item : items) {
+            if (item.getPromotionAppliedQuantity() > 0) {
+                System.out.println("============= 증 정 ===============");
+                System.out.printf("%-12s %-8d\n", item.getName(), item.getPromotionAppliedQuantity());
+            }
         }
         System.out.println("====================================");
         System.out.printf("%-12s %-8s %-10s\n", "총구매액", "", String.format("%,d", totalAmount));
@@ -60,6 +68,10 @@ public class Receipt {
 
         public int getQuantity() {
             return quantity;
+        }
+
+        public int getPromotionAppliedQuantity() {
+            return promotionAppliedQuantity;
         }
 
         public int getItemTotal() {
