@@ -60,6 +60,10 @@ public class Product {
         this.quantity = quantity;
     }
 
+    public int getPromotionBuy() {
+        return promotion.getBuy();
+    }
+
     @Override
     public String toString() {
         NumberFormat formatter = NumberFormat.getInstance();

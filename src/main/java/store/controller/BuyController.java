@@ -48,10 +48,19 @@ public class BuyController {
     private void processPromotionalItem(Receipt receipt, Product product, int number, Map<String, Integer> purchasedItems, String key) {
         int eventProduct = product.addPromotions(number);
         if (eventProduct != 0) {
-            OutputView.printAddEventProduct(eventProduct, product.getName());
-            if (InputView.yOrN()) {
-                number += eventProduct;
-                purchasedItems.put(key, number);
+            if (product.getQuantity() >= eventProduct + number) {
+                OutputView.printAddEventProduct(eventProduct, product.getName());
+                if (InputView.yOrN()) {
+                    number += eventProduct;
+                    purchasedItems.put(key, number);
+                }
+            }
+            if (product.getQuantity() < eventProduct + number) {
+                OutputView.PromotionNotApplied(product);
+                if (!InputView.yOrN()) {
+                    number -= product.getPromotionBuy();
+                    purchasedItems.put(key, number);
+                }
             }
         }
         store.deductInventory(product.getName(), number);
