@@ -2,6 +2,7 @@ package store.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class Store {
     private final List<Product> productList = new ArrayList<>();
@@ -35,5 +36,11 @@ public class Store {
                 .filter(product -> product.getName().equals(productName))
                 .findFirst()
                 .ifPresent(product -> product.setQuantity(product.getQuantity() - quantity));
+    }
+
+    public Optional<Product> findProductByName(String productName) {
+        return productList.stream()
+                .filter(product -> product.getName().equals(productName))
+                .findFirst();
     }
 }

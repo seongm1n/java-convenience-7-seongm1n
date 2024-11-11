@@ -9,13 +9,19 @@ import store.view.OutputView;
 import java.util.Map;
 
 public class BuyController {
-    public void buyProduct(Store store) {
+    private final Store store;
+
+    public BuyController(Store store) {
+        this.store = store;
+    }
+
+    public void buyProduct() {
         boolean continueShopping = true;
         while (continueShopping) {
             Receipt receipt = new Receipt();
             try {
                 Map<String, Integer> purchasedItems = InputView.purchasedItems();
-                processPurchasedItems(store, receipt, purchasedItems);
+                processPurchasedItems(receipt, purchasedItems);
                 applyMembershipDiscount(receipt);
                 receipt.print();
                 OutputView.askForAdditionalPurchase();
@@ -27,19 +33,19 @@ public class BuyController {
         }
     }
 
-    private void processPurchasedItems(Store store, Receipt receipt, Map<String, Integer> purchasedItems) {
+    private void processPurchasedItems(Receipt receipt, Map<String, Integer> purchasedItems) {
         for (String key : purchasedItems.keySet()) {
             int number = purchasedItems.get(key);
-            Product product = checkInventory(store, key, number);
+            Product product = checkInventory(key, number);
             if (product.isPromotion()) {
-                processPromotionalItem(receipt, product, number, purchasedItems, key, store);
+                processPromotionalItem(receipt, product, number, purchasedItems, key);
             } else {
                 addItemToReceipt(receipt, product, number, 0);
             }
         }
     }
 
-    private void processPromotionalItem(Receipt receipt, Product product, int number, Map<String, Integer> purchasedItems, String key, Store store) {
+    private void processPromotionalItem(Receipt receipt, Product product, int number, Map<String, Integer> purchasedItems, String key) {
         int eventProduct = product.addPromotions(number);
         if (eventProduct != 0) {
             OutputView.printAddEventProduct(eventProduct, product.getName());
@@ -63,18 +69,15 @@ public class BuyController {
         }
     }
 
-    private Product checkInventory(Store store, String productName, int quantity) {
+    private Product checkInventory(String productName, int quantity) {
         if (productName == null || quantity <= 0) {
             throw new IllegalArgumentException("[ERROR] 잘못된 입력입니다. 다시 입력해 주세요.");
         }
-        for (Product product : store.getProductList()) {
-            if (product.getName().equals(productName)) {
-                if (product.getQuantity() < quantity) {
-                    throw new IllegalArgumentException("[ERROR] 재고 수량을 초과하여 구매할 수 없습니다. 다시 입력해 주세요.");
-                }
-                return product;
-            }
+        Product product = store.findProductByName(productName)
+                .orElseThrow(() -> new IllegalArgumentException("[ERROR] 존재하지 않는 상품입니다. 다시 입력해 주세요."));
+        if (product.getQuantity() < quantity) {
+            throw new IllegalArgumentException("[ERROR] 재고 수량을 초과하여 구매할 수 없습니다. 다시 입력해 주세요.");
         }
-        throw new IllegalArgumentException("[ERROR] 존재하지 않는 상품입니다. 다시 입력해 주세요.");
+        return product;
     }
 }
