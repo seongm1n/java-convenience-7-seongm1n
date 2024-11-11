@@ -71,7 +71,6 @@ public class StoreController {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
             return reader.lines().collect(Collectors.joining("\n"));
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
     }
